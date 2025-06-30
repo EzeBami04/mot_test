@@ -6,10 +6,10 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def main():
-    user = "postgres"
-    password = "postgres"
-    host = "localhost"
-    port = "5432"
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASSWORD")
+    host = os.getenv("DB_HOST")
+    port = os.getenv("DB_PORT")
     schema = "public"
 
     # ======= Create database ========
