@@ -12,11 +12,11 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 base_url = "https://data.gov.il/api/3/action/datastore_search"
 
 def create_database():
-    host = "localhost"
-    port = "5432"
-    dbname = "postgres"
-    user = "postgres"
-    password = "postgres"
+    host = os.getenv("DB_HOST")
+    port = os.getenv("DB_PORT")
+    dbname = os.getenv("DB_NAME")
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASSWORD")
     conn = psycopg2.connect(host=host, port=port, dbname=dbname, user=user, password=password)
     conn.autocommit = True
     cur = conn.cursor()
