@@ -1,0 +1,44 @@
+name: etl-job
+on:    
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1"
+
+jobs:
+  run-etl:
+    runs-on: ubuntu-latest
+    env:  # Inject all your secrets into the environment
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+    steps:
+      - name: Checkout repo content
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Run data pipeline 
+        run: python main.py  
+
+      - name: Check for changes
+        run: |
+          git config user.name 'github-actions'
+          git config user.email 'githubaction@github.com'
+          git add .
+          git diff --staged --quiet || echo "change=true" >> $GITHUB_ENV
+
+      - name: Commit and push
+        if: env.change == 'true'  
+        run: |
+          git commit -m "Updated ETL output"
+          git push
