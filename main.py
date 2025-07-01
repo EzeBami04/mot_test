@@ -1,6 +1,6 @@
 import os
-from et import create_database
-from et import load
+from app.et import create_database
+from app.et import load
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
