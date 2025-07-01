@@ -1,5 +1,5 @@
 import os
-from etl import load
+from etl import create_database, load
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -9,7 +9,7 @@ def main():
     password = os.getenv("DB_PASSWORD")
     host = os.getenv("DB_HOST")
     port = os.getenv("DB_PORT")
-    db_name = os.getenv("DB_NAME")
+    db_name = create_database()
     schema = "public"
 
     # Connection string for the existing database
