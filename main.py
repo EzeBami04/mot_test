@@ -13,7 +13,7 @@ def main():
     schema = "public"
 
     # Connection string for the existing database
-    conn_str = f"postgresql://{user}:{password}@{host}:{port}/{db_name}?sslmode=disable"
+    conn_str = f"postgresql://{user}:{password}@{host}:{port}/{db_name}?sslmode=require"
     
     if not all([user, password, host, port, db_name]):
         logging.error("Missing required database connection parameters.")
