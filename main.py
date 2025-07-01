@@ -11,9 +11,7 @@ def main():
     host = os.getenv("DB_HOST")
     port = os.getenv("DB_PORT")
     schema = "public"
-
-    # ======= Create database ========
-    db_name = create_database()
+    db_name = os.getenv("DB_NAME")
 
     # Connection string for mot_vehicles database
     conn_str = f"postgresql://{user}:{password}@{host}:{port}/{db_name}?sslmode=disable"
