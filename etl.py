@@ -5,13 +5,10 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import logging
-import os
 from uuid import uuid4
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 base_url = "https://data.gov.il/api/3/action/datastore_search"
-
-
 
 def generate_table_schema(df: pd.DataFrame, table_name: str, schema: str = 'public') -> str:
     type_mapping = {
