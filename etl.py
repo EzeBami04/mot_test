@@ -11,26 +11,7 @@ from uuid import uuid4
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 base_url = "https://data.gov.il/api/3/action/datastore_search"
 
-def create_database():
-    host = os.getenv("DB_HOST")
-    port = os.getenv("DB_PORT")
-    dbname = os.getenv("DB_NAME")
-    user = os.getenv("DB_USER")
-    password = os.getenv("DB_PASSWORD")
-    conn = psycopg2.connect(host=host, port=port, dbname=dbname, user=user, password=password)
-    conn.autocommit = True
-    cur = conn.cursor()
-    try:
-        cur.execute("DROP DATABASE IF EXISTS mot_vehicles;")
-        cur.execute("CREATE DATABASE mot_vehicles;")
-        logging.info("Database 'mot_vehicles' created successfully.")
-        return "mot_vehicles"
-    except psycopg2.Error as e:
-        logging.error(f"Error creating database: {e}")
-        raise
-    finally:
-        cur.close()
-        conn.close()
+
 
 def generate_table_schema(df: pd.DataFrame, table_name: str, schema: str = 'public') -> str:
     type_mapping = {
