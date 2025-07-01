@@ -1,5 +1,4 @@
 import os
-from etl import create_database
 from etl import load
 import logging
 
