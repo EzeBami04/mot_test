@@ -65,9 +65,14 @@ def extractor(resource_id: str) -> pd.DataFrame:
         return None
 
 def load(resource_id: str, table_name: str, conn_str: str, schema: str = 'public'):
-    conn = psycopg2.connect(conn_str)
-    conn.autocommit = False
-    cursor = conn.cursor()
+    try:
+        conn = psycopg2.connect(conn_str)
+        conn.autocommit = False
+        cursor = conn.cursor()
+    except psycopg2.Error as e:
+        logging.error(f"Failed to connect to database: {e}")
+        raise
+
     try:
         # Check schema permissions
         cursor.execute(f"SELECT has_schema_privilege('{schema}', 'CREATE');")
