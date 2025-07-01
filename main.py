@@ -9,10 +9,10 @@ def main():
     password = os.getenv("DB_PASSWORD")
     host = os.getenv("DB_HOST")
     port = os.getenv("DB_PORT")
-    schema = "public"
     db_name = os.getenv("DB_NAME")
+    schema = "public"
 
-    # Connection string for mot_vehicles database
+    # Connection string for the existing database
     conn_str = f"postgresql://{user}:{password}@{host}:{port}/{db_name}?sslmode=disable"
     
     if not all([user, password, host, port, db_name]):
