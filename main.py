@@ -9,7 +9,7 @@ def main():
     password = os.getenv("DB_PASSWORD")
     host = os.getenv("DB_HOST")
     port = os.getenv("DB_PORT")
-    db_name = create_database()
+    db_name = os.getenv("DB_NAME")
     schema = "public"
 
     # Connection string for the existing database
