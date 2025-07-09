@@ -9,7 +9,7 @@ def main():
     password = os.getenv("DB_PASSWORD")
     host = os.getenv("DB_HOST")
     port = os.getenv("DB_PORT")
-    db_name = os.getenv("DB_NAME")
+    db_name = "postgres"
 
     if not all([user, password, host, port, db_name]):
         logging.error("Missing required database connection parameters.")
