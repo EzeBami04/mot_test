@@ -80,7 +80,7 @@ def log_monitoring_entry(conn_str: str, resource_id: str, table_name: str, row_c
     with psycopg2.connect(conn_str) as conn:
         with conn.cursor() as cursor:
             cursor.execute("""
-                INSERT INTO public.etl_monitoring (resource_id, table_name, load_time, row_count, notess)
+                INSERT INTO public.etl_monitoring (resource_id, table_name, load_time, row_count, notes)
                 VALUES (%s, %s, %s, %s, %s);
             """, (resource_id, table_name, datetime.now(), row_count, status))
             conn.commit()
