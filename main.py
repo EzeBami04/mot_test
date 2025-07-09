@@ -1,6 +1,6 @@
 import os
-from etl import create_database, load
 import logging
+from etl import create_monitoring_table, load_to_table
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -10,17 +10,20 @@ def main():
     host = os.getenv("DB_HOST")
     port = os.getenv("DB_PORT")
     db_name = os.getenv("DB_NAME")
-    schema = "public"
 
-    # Connection string for the existing database
-    conn_str = f"postgresql://{user}:{password}@{host}:{port}/{db_name}?sslmode=require"
-    
     if not all([user, password, host, port, db_name]):
         logging.error("Missing required database connection parameters.")
         raise ValueError("Database connection parameters incomplete.")
 
+    conn_str = f"postgresql://{user}:{password}@{host}:{port}/{db_name}?sslmode=require"
+
+    # Create monitoring table once
+    create_monitoring_table(conn_str)
+
+    # Your resources list
     resources = [
         {"resource_id": "142afde2-6228-49f9-8a29-9b6c3a0cbe40", "table_name": "mot_submodels"},
+        {"resource_id": "c8b9f9c8-4612-4068-934f-d4acd2e3c06e", "table_name": "mot_disability_permits"},
         {"resource_id": "5e87a7a1-2f6f-41c1-8aec-7216d52a6cf6", "table_name": "mot_amounts"},
         {"resource_id": "bb2355dc-9ec7-4f06-9c3f-3344672171da", "table_name": "mot_car_history_owners"},
         {"resource_id": "56063a99-8a3e-4ff4-912e-5966c0279bad", "table_name": "mot_car_history_physical"},
@@ -34,7 +37,7 @@ def main():
         {"resource_id": "2c33523f-87aa-44ec-a736-edbb0a82975e", "table_name": "mot_recalls"},
         {"resource_id": "83bfb278-7be1-4dab-ae2d-40125a923da1", "table_name": "mot_safety_discount_ind"},
         {"resource_id": "cf29862d-ca25-4691-84f6-1be60dcb4a1e", "table_name": "mot_public_transport"},
-        {"resource_id": "7cb2bd95-bf2e-49b6-aea1-fcb5ff6f0473", "table_name": "pollution_filter"},
+        {"resource_id": "7cb2bd95-bf2e-49b6-aea1-fcb5ff6f0473", "table_name": "mot_pollution_filter"},
         {"resource_id": "f6efe89a-fb3d-43a4-bb61-9bf12a9b9099", "table_name": "mot_no_yearly_inspection"},
         {"resource_id": "6f6acd03-f351-4a8f-8ecf-df792f4f573a", "table_name": "mot_inactive_no_degemcode"},
         {"resource_id": "851ecab1-0622-4dbe-a6c7-f950cf82abf9", "table_name": "mot_taken_off_2016_today"},
@@ -42,10 +45,11 @@ def main():
         {"resource_id": "ec8cbc34-72e1-4b69-9c48-22821ba0bd6c", "table_name": "mot_taken_off_2000_2009"}
     ]
 
+    # Process each resource
     for resource in resources:
         logging.info(f"Processing resource {resource['resource_id']} into table {resource['table_name']}")
         try:
-            load(resource['resource_id'], resource['table_name'], conn_str, schema)
+            load_to_table(resource['resource_id'], resource['table_name'], conn_str)
         except Exception as e:
             logging.error(f"Failed to process resource {resource['resource_id']}: {e}")
             continue
