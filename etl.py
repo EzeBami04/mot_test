@@ -26,7 +26,7 @@ def generate_table_schema(df: pd.DataFrame, table_name: str) -> str:
             columns.append("_id INTEGER PRIMARY KEY")
         else:
             columns.append(f'"{clean_col}" {type_mapping.get(dtype, "TEXT")}')
-    return f'CREATE TABLE IF NOT EXISTS sources_api.{table_name} ({", ".join(columns)});'
+    return f'CREATE TABLE IF NOT EXISTS public.{table_name} ({", ".join(columns)});'
 
 # Extractor
 def extractor(resource_id: str) -> pd.DataFrame:
